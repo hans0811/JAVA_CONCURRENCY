@@ -20,13 +20,12 @@ import java.util.logging.Logger;
 public class TestExecutors {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExecutorService service = Executors.newSingleThreadExecutor();
+        ExecutorService service = Executors.newFixedThreadPool(3);
         List<String> users = getUsersFromFile("/Users/hans/Desktop/tutorial/Ex_Files_Java_EE_Concurrency/Exercise Files/Chapter3/03_07/begin/javaseconcurrency/new_users.txt");
 
         UserDao dao = new UserDao();
         for(String user:users){
-            Future<Integer> future = service.submit(new UserProcessor(user, dao));
-            System.out.println("Result of the operation is: " + future.get());
+            service.submit(new UserProcessor(user, dao));
         }
         service.shutdown();
         System.out.println("Main execution over");
